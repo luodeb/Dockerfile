@@ -21,6 +21,12 @@ RUN apk -U --no-cache update && \
 # 刷新字体缓存
 RUN mkfontscale && mkfontdir && fc-cache
 
+# 安装时区数据
+RUN sed -ir 's#dl-cdn.alpinelinux.org#mirrors.aliyun.com#g' /etc/apk/repositories \ 
+    && apk add --no-cache tzdata \
+    && ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime \
+    && echo "Asia/Shanghai" > /etc/timezone
+
 # 设置环境变量，指定 Chromium 路径
 ENV CHROME_PATH=/usr/bin/chromium-browser
 # 设置时区为上海
